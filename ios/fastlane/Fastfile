@@ -42,6 +42,7 @@ platform :ios do
       )       
       build
       github_release
+      upload_to_testflight(skip_submission: true);
       firebase_app_distribution(
         app: ENV['APP_ID'],
         testers: "swdevicelab@gmail.com",
