@@ -45,7 +45,7 @@ platform :ios do
       pilot(
         skip_submission: true, 
         distribute_external: false,
-        ipa: "builds/v#{version}/Runner.ipa"
+        ipa: "builds/v#{get_version_number}/Runner.ipa"
         );
       firebase_app_distribution(
         app: ENV['APP_ID'],
