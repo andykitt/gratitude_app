@@ -44,13 +44,12 @@ platform :ios do
     end
     
     lane :beta do
-      version = get_version_number
       ensure_git_status_clean
       increment_version_number(
         bump_type: "patch"
-      )
-      commit_version_bump(
-        message: "Release v#{version} :rocket:"
+        )
+        commit_version_bump(
+        message: "Release v#{get_version_number} :rocket:"
       )
       push_to_git_remote(
         remote: "origin",
