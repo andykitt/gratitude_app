@@ -61,6 +61,7 @@ platform :ios do
         build_ios_app(
           output_directory: "builds/v#{version}",
           export_options: { method: "app-store" }
+          codesigning_identity: "iPhone Distribution"
         )
     end
 
