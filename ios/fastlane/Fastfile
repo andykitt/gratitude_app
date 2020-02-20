@@ -68,7 +68,7 @@ platform :ios do
       )
       slack(
         slack_url: ENV['SLACK_URL'],
-        message: "A beta release of #{appname}(v#{version})(iOS) is now available for testing on Firebase"
+        message: "A beta release of #{appname}(v#{get_version_number})(iOS) is now available for testing on Firebase"
       )
     end
 
