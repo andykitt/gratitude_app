@@ -42,7 +42,11 @@ platform :ios do
       )       
       build
       github_release
-      upload_to_testflight(skip_submission: true);
+      pilot(
+        skip_submission: true, 
+        distribute_external: false,
+        ipa: "builds/v#{version}/Runner.ipa"
+        );
       firebase_app_distribution(
         app: ENV['APP_ID'],
         testers: "swdevicelab@gmail.com",
