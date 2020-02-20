@@ -43,7 +43,7 @@ platform :ios do
       build
       github_release
       pilot(
-        itc_team_id: ENV['ITC_TEAM_ID'],
+        team_id: ENV['ITC_TEAM_ID'],
         skip_submission: true, 
         distribute_external: false,
         ipa: "builds/v#{get_version_number}/Runner.ipa"
