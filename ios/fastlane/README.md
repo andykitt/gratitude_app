@@ -16,16 +16,11 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
-### ios envs
-```
-fastlane ios envs
-```
-My awesome app
 ### ios github_release
 ```
 fastlane ios github_release
 ```
-
+My awesome app
 ### ios beta
 ```
 fastlane ios beta

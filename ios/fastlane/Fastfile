@@ -13,61 +13,70 @@
 # Update this, if you use features of a newer version
 fastlane_version "2.28.3"
 
+
+
 default_platform :ios
 
 platform :ios do
     desc "My awesome app"
-    lane :envs do
-      puts "GITHUB_TOKEN: #{ENV['GITHUB_TOKEN']}"   
-    end
+ 
     lane :github_release do
+      version = get_version_number
+
+      changelog = changelog_from_git_commits(
+        commits_count: 20, 
+        pretty: "- %s",
+        date_format: "short",
+        match_lightweight_tag: false,
+        merge_commit_filtering: "exclude_merges"
+      )
+
       set_github_release(
-      repository_name: "andykitt/gratitude_app",
-      api_token: ENV["GITHUB_TOKEN"],
-      name: "Gratitude App v1.0.1",
-      tag_name: "v1.0.1",
-      description: (File.read("changelog") rescue "No changelog provided"),
-      commitish: "master",
-      is_prerelease: true,
-      upload_assets: ["builds/Runner.ipa"]
+        repository_name: "andykitt/gratitude_app",
+        api_token: ENV['GITHUB_TOKEN'],
+        name: "#{version}",
+        tag_name: "v#{version}",
+        description: (changelog rescue "No changelog provided"),
+        commitish: "master",
+        is_prerelease: true,
+        upload_assets: ["builds/v#{version}/Runner.ipa"]
       )
     end
     
-
     lane :beta do
-    increment_version_number(
-      bump_type: "patch"
-    )
-    get_certificates(
-      force: false,
-    )
-    get_provisioning_profile(
-      readonly: true,
-      development: true
-    )
-    build_ios_app(
-      export_options: {
-        method: "development"
-      }
-    )
-    firebase_app_distribution(
-      app: "1:775676734756:ios:e6cd7fc053d99dec4d17b1",
-      testers: "swdevicelab@gmail.com",
-      release_notes: "Lots of amazing new features to test out!",
-      firebase_cli_path: "/usr/local/bin/firebase"
-    )
-    end
-     lane :build do
-     get_provisioning_profile(
-      readonly: true,
-      development: true
-    )
-    build_ios_app(
-      export_options: {
-        method: "development"
-      }
-    )
+      version = get_version_number
+      ensure_git_status_clean
+      increment_version_number(
+        bump_type: "patch"
+      )
+      commit_version_bump(
+        message: "Release v#{version} :rocket:"
+      )
+      push_to_git_remote(
+        remote: "origin",
+        tags: false,
+        no_verify: true
+      )
 
+      # build
+      # github_release
+      # firebase_app_distribution(
+      #   app: "1:775676734756:ios:e6cd7fc053d99dec4d17b1",
+      #   testers: "swdevicelab@gmail.com",
+      #   release_notes: "Lots of amazing new features to test out!",
+      #   firebase_cli_path: "/usr/local/bin/firebase"
+      # )
+    end
+
+     lane :build do
+      version = get_version_number
+
+        build_ios_app(
+          output_directory: "builds/v#{version}",
+          export_options: {
+            method: "development"
+          }
+        )
     end
 end
 
