@@ -33,13 +33,24 @@ platform :ios do
         merge_commit_filtering: "exclude_merges"
       )
 
+      appname = get_info_plist_value(
+        path: "Runner/Info.plist",
+        key: "CFBundleName"
+      )
+
       increment_version_number(bump_type: options[:bump_type])
       commit_version_bump(message: "Release v#{get_version_number} :rocket:")
       push_to_git_remote(
         remote: "origin",
         tags: false,
         no_verify: true
-      )       
+      )    
+
+      slack(
+        slack_url: ENV['SLACK_URL'],
+        message: "A beta release of #{appname}(v#{get_version_number}) has started building, say tuned..."
+      )
+
       build
       github_release
       # pilot(
@@ -54,6 +65,10 @@ platform :ios do
         testers: "swdevicelab@gmail.com",
         release_notes: changelog,
         firebase_cli_path: "/usr/local/bin/firebase"
+      )
+      slack(
+        slack_url: ENV['SLACK_URL'],
+        message: "A beta release of #{appname}(v#{version})(iOS) is now available for testing on Firebase"
       )
     end
 
