@@ -60,7 +60,7 @@ platform :ios do
       version = get_version_number
         build_ios_app(
           output_directory: "builds/v#{version}",
-          export_options: { method: "development" }
+          export_options: { method: "app-store" }
         )
     end
 
